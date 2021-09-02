@@ -7,6 +7,8 @@ import java.util.HashMap;
 
 abstract class Expr { 
   abstract public int eval(Map<String,Integer> env);
+  abstract public String fmt();
+  abstract public String fmt2(Map<String,Integer> env);
 }
 
 class CstI extends Expr { 
@@ -18,7 +20,15 @@ class CstI extends Expr {
 
   public int eval(Map<String,Integer> env) {
     return i;
-  } 
+  }
+
+  public String fmt() {
+    return ""+i;
+  }
+
+  public String fmt2(Map<String,Integer> env) {
+    return ""+i;
+  }
 }
 
 class Var extends Expr { 
@@ -30,6 +40,14 @@ class Var extends Expr {
 
   public int eval(Map<String,Integer> env) {
     return env.get(name);
+  }
+
+  public String fmt() {
+    return name;
+  } 
+
+  public String fmt2(Map<String,Integer> env) {
+    return ""+env.get(name);
   } 
 }
 
@@ -50,6 +68,14 @@ class Prim extends Expr {
       return e1.eval(env) - e2.eval(env);
     else
       throw new RuntimeException("unknown primitive");
+  } 
+
+  public String fmt() {
+    return "(" + e1.fmt() + oper + e2.fmt() + ")";
+  } 
+
+  public String fmt2(Map<String,Integer> env) {
+    return "(" + e1.fmt2(env) + oper + e2.fmt2(env) + ")";
   } 
 }
 
