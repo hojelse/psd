@@ -1,0 +1,15 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net5.0</TargetFramework>
+    <RootNamespace>_2021_assignment_1</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Include="Intro1.fs" />
+    <Compile Include="Intro2.fs" />
+    <Compile Include="Appendix.fs" />
+  </ItemGroup>
+
+</Project>
