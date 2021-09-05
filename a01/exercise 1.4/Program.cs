@@ -99,7 +99,7 @@ class Add : Binop
             if (aCst?.c == 0) return b;
             if (bCst?.c == 0) return a;
             if (aCst != null && bCst != null)
-                return new CstI(aCst.c + bCst.c);
+                return new CstI(op(aCst.c, bCst.c));
             return this;
         };
     }
@@ -120,7 +120,7 @@ class Mul : Binop
             if (aCst?.c == 1) return b;
             if (bCst?.c == 1) return a;
             if (aCst != null && bCst != null)
-                return new CstI(aCst.c * bCst.c);
+                return new CstI(op(aCst.c, bCst.c));
             return this;
         };
     }
@@ -138,7 +138,7 @@ class Sub : Binop
 
             if (bCst?.c == 0) return a;
             if (aCst != null && bCst != null)
-                return new CstI(aCst.c - bCst.c);
+                return new CstI(op(aCst.c, bCst.c));
             return this;
         };
     }
@@ -154,10 +154,10 @@ class Mod : Binop
             CstI aCst = a as CstI;
             CstI bCst = b as CstI;
 
-            if (bCst?.c == 0) return new CstI(0);
-            if (bCst?.c == 1) return a;
+            if (bCst?.c == 0) return a;
+            if (bCst?.c == 1) return new CstI(0);
             if (aCst != null && bCst != null)
-                return new CstI(aCst.c + bCst.c);
+                return new CstI(op(aCst.c, bCst.c));
             return this;
         };
     }
@@ -169,6 +169,14 @@ class BinAnd : Binop
     {
         this.symbol = '&';
         this.op = (x, y) => x & y;
+        this.simpl = (a, b) => {
+            CstI aCst = a as CstI;
+            CstI bCst = b as CstI;
+
+            if (aCst is not null && bCst is not null)
+                return new CstI(op(aCst.c, bCst.c));
+            return this;
+        };
     }
 }
 
@@ -178,6 +186,14 @@ class BinOr : Binop
     {
         this.symbol = '|';
         this.op = (x, y) => x | y;
+        this.simpl = (a, b) => {
+            CstI aCst = a as CstI;
+            CstI bCst = b as CstI;
+
+            if (aCst is not null && bCst is not null)
+                return new CstI(op(aCst.c, bCst.c));
+            return this;
+        };
     }
 }
 
