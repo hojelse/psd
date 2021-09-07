@@ -6,7 +6,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Include="Intcomp.fs" />
+    <!-- <Compile Include="Intcomp.fs" /> -->
     <Compile Include="Program.fs" />
   </ItemGroup>
 
