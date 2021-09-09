@@ -25,37 +25,61 @@ let assemble instrs = List.foldBack (fun x acc -> sinstrToInt x @ acc) instrs []
 (* Output the integers in list inss to the text file called fname: *)
 
 let intsToFile (inss : int list) (fname : string) = 
-    let text = String.concat " " (List.map string inss)
-    System.IO.File.WriteAllText(fname, text);;
+  let text = String.concat " " (List.map string inss)
+  System.IO.File.WriteAllText(fname, text);;
+
+// let printExample() =
+//   let src = "let z = 17 in z + z end"
+//   printfn "source   : %A" src
+//   let expression =  fromString src
+//   printfn "abstract : %A" expression
+//   let assembly = scomp expression []
+//   printfn "assembly : %A" assembly
+//   let bytes = assemble assembly
+//   printfn "bytes    : %A" bytes
+
+let srcToBin =
+  fromFile
+  >> (fun x -> scomp x [])
+  >> assemble
+  >> intsToFile
+
+let result1 = run (fromString "2 + 3 * 4")
+let result2 = (eval (fromString "2 + x * 4") [("x", 3)])
+let result3 = (eval (fromString "let x = 1+2 in 2 + x * 4 end") [])
+
+let code1 = scomp (fromString "2 + 3 * 4") []
+let result4 = seval code1 []
+
+let code2 = scomp (fromString "2 + x * 4") [Bound "x"]
+let result5 = seval code2 [3]
+
+let code3 = scomp (fromString "let x = 1+2 in 2 + x * 4 end") []
+let result6 = seval code3 []
+
 
 [<EntryPoint>]
 let main argv =
-      // printfn "printing to ./is1.txt"
-      // intsToFile (assemble (scomp e1 [])) "is1.txt";
+  // printExample()
 
-      printfn "%A" (run (fromString "2 + 3 * 4"))
-      printfn "%A" (eval (fromString "2 + x * 4") [("x", 3)])
-      printfn "%A" (eval (fromString "let x = 1+2 in 2 + x * 4 end") [])
-      printfn "%A" (run (fromString "2 + 3 * 4"))
+  Console.ReadLine()
+  |> fromString
+  |> fun x -> scomp x []
+  |> assemble
+  |> fun x -> List.foldBack (fun i acc -> sprintf "%i %s" i acc) x ""
+  |> Console.WriteLine
 
-      let code1 = scomp (fromString "2 + 3 * 4") []
-      printfn "%A" (seval code1 [])
+  // srcToBin "src.txt" "bytes.txt"
 
-      let code2 = scomp (fromString "2 + x * 4") [Bound "x"]
-      printfn "%A" (seval code2 [3])
+  // printfn "%A" result1
+  // printfn "%A" result2
+  // printfn "%A" result3
+  // printfn "%A" result4
+  // printfn "%A" result5
+  // printfn "%A" result6
 
-      let code3 = scomp (fromString "let x = 1+2 in 2 + x * 4 end") []
-      printfn "%A" (seval code3 [])
-
-      printfn "%A" ("let z = 3 in z + 1 end" |> fromString |> run)
-      // printfn "%A" ("let z = 3 in let y = 1 in z + y end" |> fromString |> run)
-
-      printfn "Hello World from FsLex!\n\nPlease pass a digit:"
-      let input = Console.ReadLine()
-      let res = Token (LexBuffer<char>.FromString input)
-      printfn "The lexer recognizes %A" res
-
-      printfn "%i" (tagOfToken (keyword "let"))
-
-      printfn "%A" (CstI 1)
-      0
+  // printfn "Hello World from FsLex!\nPlease pass a digit:"
+  // let input = Console.ReadLine()
+  // let res = Token (LexBuffer<char>.FromString input)
+  // printfn "The lexer recognizes %A" res
+  0
