@@ -1,11 +1,5 @@
-(* Programming language concepts for software developers, 2010-08-28 *)
-
-(* Evaluating simple expressions with variables *)
-
 module Intro2
 open System
-
-(* Association lists map object language variables to their values *)
 
 let env = [("a", 3); ("c", 78); ("baf", 666); ("b", 111)];;
 
@@ -18,9 +12,6 @@ let rec lookup env x =
 
 let cvalue = lookup env "c";;
 
-
-(* Object language expressions with variables *)
-
 type expr = 
   | CstI of int
   | Var of string
@@ -32,16 +23,6 @@ let e1 = CstI 17;;
 let e2 = Prim("+", CstI 3, Var "a");;
 
 let e3 = Prim("+", Prim("*", Var "b", CstI 9), Var "a");;
-
-let e4 = Prim("==", Var "baf", Var "a");;
-
-let e5 = Prim("==", Var "baf", CstI 666);;
-
-let e6 = Prim("min", Var "baf", CstI 665);;
-
-let e7 = Prim("max", Var "baf", CstI 665);;
-
-(* Evaluation within an environment *)
 
 let rec eval e (env : (string * int) list) : int =
     match e with
@@ -60,10 +41,19 @@ let e2v1 = eval e2 env;;
 let e2v2 = eval e2 [("a", 314)];;
 let e3v  = eval e3 env;;
 
+(* Exercise 1.1.2 *)
+
+let e4 = Prim("==", Var "baf", Var "a");;
+let e5 = Prim("==", Var "baf", CstI 666);;
+let e6 = Prim("min", Var "baf", CstI 665);;
+let e7 = Prim("max", Var "baf", CstI 665);;
+
 let e4v  = eval e4 env;;
 let e5v  = eval e5 env;;
 let e6v  = eval e6 env;;
 let e7v  = eval e7 env;;
+
+(* Exercise 1.1.3*)
 
 let rec eval2 e (env : (string * int) list) : int =
     match e with
@@ -80,6 +70,7 @@ let rec eval2 e (env : (string * int) list) : int =
         |"max" -> max i1 i2
         |"==" -> if i1 = i2 then 1 else 0
         | _ -> failwith "unknown operator"
+    (* Exercise 1.1.4 *)
     | If(e1, e2, e3) ->
         match eval e1 env with
         | 0 -> eval e3 env
@@ -91,6 +82,7 @@ let honk2 = If(CstI 0, CstI 11, CstI 22);;
 let bonk1 = eval2 honk1 env;;
 let bonk2 = eval2 honk2 env;;
 
+(* Exercise 1.2 *)
 type aexpr = 
     | CstI of int
     | Var of string
@@ -98,9 +90,13 @@ type aexpr =
     | Mul of aexpr * aexpr
     | Sub of aexpr * aexpr
 
+(* Exercise 1.2.2 *)
+
 let a1 = Sub(Var "v", Add(Var "w", Var "z"));;
 let a2 = Mul(CstI 2, Sub(Var "v", Add(Var "w", Var "z")))
 let a3 = Add(Var "x", Add(Var "y", Add(Var "z", Var "v")))
+
+(* Exercise 1.2.3 *)
 
 let rec fmt (a:aexpr) : string =
     match a with
@@ -113,6 +109,8 @@ let rec fmt (a:aexpr) : string =
 let aa1 = fmt a1;;
 let aa2 = fmt a2;;
 let aa3 = fmt a3;;
+
+(* Exercise 1.2.4 *)
 
 let rec simplify (a:aexpr) : aexpr =
     match a with
@@ -145,6 +143,8 @@ let rec simplify (a:aexpr) : aexpr =
         | CstI x, aR' -> Mul (CstI x, aR')
         | aL', aR' -> Mul (aL', aR')
     | _ -> a
+
+(* Exercise 1.2.5 *)
 
 let rec diff (a:aexpr) (v:string) : aexpr =
     match a with

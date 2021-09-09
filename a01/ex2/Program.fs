@@ -18,7 +18,7 @@ let rec eval e (env : (string * int) list) : int =
     | Var x             -> lookup env x
     | Let(binds, ebody) ->
         // aux binds env ebody
-        List.fold (fun (env':(string*int) list) x -> (fst x, eval (snd x) env')::env') env binds
+        List.fold (fun env' (v, ex) -> (v, eval ex env')::env') env binds
         |> eval ebody
     | Prim("+", e1, e2) -> eval e1 env + eval e2 env
     | Prim("*", e1, e2) -> eval e1 env * eval e2 env
@@ -68,13 +68,11 @@ let rec freevars e : string list =
     match e with
     | CstI i -> []
     | Var x  -> [x]
-    // | Let(x, erhs, ebody) ->
-    //       union (freevars erhs, minus (freevars ebody, [x]))
     | Let(binds, ebody) ->
-        List.fold (fun acc (v, e) -> (if containsVar e v then union([v],acc) else acc)) [] binds
+        List.fold (fun acc (v, e) -> (if containsVar e v then union([v], acc) else acc)) [] binds
     | Prim(ope, e1, e2) -> union (freevars e1, freevars e2)
 
-let e_free = Let([("x1", Prim("+", Var("x1"), CstI 7))], Prim("+", Var("x1"), CstI 8))
+let e_free = Let([("x1", Prim("+", Var("x1"), CstI 7)); ("x2", CstI 1)], Prim("+", Var("x1"), CstI 8))
 
 (* Exercise 2.3 *)
 
@@ -82,23 +80,37 @@ type texpr =                            (* target expressions *)
   | TCstI of int
   | TVar of int                         (* index into runtime environment *)
   | TLet of texpr * texpr               (* erhs and ebody                 *)
-  | TPrim of string * texpr * texpr;;
+  | TPrim of string * texpr * texpr
 
 let rec getindex vs x =
     match vs with
     | []    -> failwith "Variable not found"
-    | y::yr -> if x=y then 0 else 1 + getindex yr x;;
+    | y::yr -> if x=y then 0 else 1 + getindex yr x
 
 let rec tcomp (e : expr) (cenv : string list) : texpr =
     match e with
     | CstI i -> TCstI i
     | Var x  -> TVar (getindex cenv x)
     | Let(binds, ebody) ->
-        // List.fold (fun env' (v, e) -> )  binds
+        match binds with
+        | [] -> tcomp ebody cenv
+        | (v, e)::bindsr ->
+            let newLet = Let(bindsr, ebody)
+            TLet(tcomp e cenv, tcomp newLet (v::cenv))
+    | Prim(ope, e1, e2) -> TPrim(ope, tcomp e1 cenv, tcomp e2 cenv)
 
-    // TLet(tcomp erhs cenv, tcomp ebody cenv1)
+// let x = 10
+// let y = 1 + x
+// x + y
 
-    // | Let(x, erhs, ebody) ->
-    //     let cenv1 = x :: cenv
-    //     TLet(tcomp erhs cenv, tcomp ebody cenv1)
-    | Prim(ope, e1, e2) -> TPrim(ope, tcomp e1 cenv, tcomp e2 cenv);;
+            // x = 10;         y = 1 + x;                          x + y
+let eT = Let([("x", CstI 10); ("y", Prim("+", CstI 1, Var("x")))], Prim("+", Var("x"), Var("y")))
+
+// TLet(TCstI 10, Let([("y", Prim("+", CstI 1, Var x)], Prim("+", Var("x"), Var("y"))))
+// TLet(TCstI 10, TLet(1 + x, Let([], Prim("+", Var("x"), Var("y")))))
+// TLet(TCstI 10, TLet(1 + TVar 0, Let([], Prim("+", Var("x"), Var("y")))))
+// TLet(TCstI 10, TLet(1 + TVar 0, TPrim (Var "x", Var "y")))
+// TLet(TCstI 10, TLet(1 + TVar 0, TPrim (TVar 0 + TVar 1)))
+
+let eTcomped = TLet(TCstI 10, TLet (TPrim ("+", TCstI 1, TVar 0), TPrim ("+", TVar 1, TVar 0)))
+
