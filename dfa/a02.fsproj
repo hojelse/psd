@@ -1,0 +1,33 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net5.0</TargetFramework>
+  </PropertyGroup>
+  <ItemGroup>
+    <FsLex Include="CLex.fsl">
+      <OtherFlags>--module CLex --unicode</OtherFlags>
+    </FsLex>
+    <FsYacc Include="CPar.fsy">
+      <OtherFlags>--module CPar</OtherFlags>
+    </FsYacc>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="CLex.fsl" />
+    <None Include="CPar.fsy" />
+    <Compile Include="Machine.fs" />
+    <Compile Include="Absyn.fs" />
+    <Compile Include="CPar.fsi" />
+    <Compile Include="CPar.fs" />
+    <Compile Include="CLex.fs" />
+    <Compile Include="Interp.fs" />
+    <Compile Include="Comp.fs" />
+    <Compile Include="Contcomp.fs" />
+    <Compile Include="Parse.fs" />
+    <Compile Include="MicroCC.fs" />
+    <Compile Include="Answers.fs" />
+    <Compile Include="Program.fs" />
+    <PackageReference Include="FsLexYacc" Version="10.0.0" />
+    <PackageReference Include="FsLexYacc.Runtime" Version="10.0.0" />
+  </ItemGroup>
+
+</Project>
