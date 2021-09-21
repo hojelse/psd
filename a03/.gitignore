@@ -1,0 +1,11 @@
+bin
+obj
+
+*.class
+
+*Lex.fs
+*Par.fs
+*Par.fsi
+
+.fake
+.ionide
