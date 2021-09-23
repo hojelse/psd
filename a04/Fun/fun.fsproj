@@ -29,6 +29,8 @@
       <Compile Include="TypeInference.fs" />
       <Compile Include="ParseAndType.fs" />
 
+      <Compile Include="Program.fs" />
+
       <PackageReference Include="FsLexYacc" Version="10.2.0" />
   </ItemGroup>
 </Project>
