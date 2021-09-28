@@ -32,4 +32,25 @@ let main argv =
   let multi_arg = Letfun("f", ["x"; "y"], Prim("+", Var "x", Var "y"), Call(Var "f", [CstI 10; CstI 1]))
   printfn "multi_arg abst: %A" (eval multi_arg [])
 
+  (* Exercise 4.4 *)
+  let multi_arg1 = fromString "let f a b = a + b in f 1 2 end"
+  printfn "multi_arg1 abst: %A" multi_arg1
+  printfn "multi_arg1 eval: %A" (run multi_arg1)
+
+  let multi_arg2_pow = fromString "let pow x n = if n=0 then 1 else x * pow x (n-1) in pow 3 8 end"
+  printfn "multi_arg2_pow abst: %A" multi_arg2_pow
+  printfn "multi_arg2_pow eval: %A" (run multi_arg2_pow)
+
+  let multi_arg3_max = fromString @"
+    let max2 a b = if a<b then b else a
+    in let max3 a b c = max2 a (max2 b c)
+      in max3 25 6 62 end
+    end
+  "
+  printfn "multi_arg3_max abst: %A" multi_arg3_max
+  printfn "multi_arg3_max eval: %A" (run multi_arg3_max)
+
+  (* Exercise 4.5 *)
+  
+
   0

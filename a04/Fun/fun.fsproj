@@ -23,11 +23,11 @@
       <Compile Include="FunLex.fs" />
 
       <Compile Include="Parse.fs" />
-      <Compile Include="HigherFun.fs" />
+      <!-- <Compile Include="HigherFun.fs" /> -->
       <Compile Include="ParseAndRun.fs" />
-      <Compile Include="ParseAndRunHigher.fs" />
-      <Compile Include="TypeInference.fs" />
-      <Compile Include="ParseAndType.fs" />
+      <!-- <Compile Include="ParseAndRunHigher.fs" /> -->
+      <!-- <Compile Include="TypeInference.fs" /> -->
+      <!-- <Compile Include="ParseAndType.fs" /> -->
 
       <Compile Include="Program.fs" />
 
