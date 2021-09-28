@@ -51,6 +51,28 @@ let main argv =
   printfn "multi_arg3_max eval: %A" (run multi_arg3_max)
 
   (* Exercise 4.5 *)
-  
+  let logical_and = fromString @"
+    let and a b = a && b in and true true end
+  "
+  printfn "logical_and abst: %A" logical_and
+  printfn "logical_and eval: %A" (run logical_and)
+
+  let logical_and2 = fromString @"
+    let and a b = a && b in and true false end
+  "
+  printfn "logical_and2 abst: %A" logical_and2
+  printfn "logical_and2 eval: %A" (run logical_and2)
+
+  let logical_or = fromString @"
+    let or a b = a || b in or false true end
+  "
+  printfn "logical_or abst: %A" logical_or
+  printfn "logical_or eval: %A" (run logical_or)
+
+  let logical_or2 = fromString @"
+    let or a b = a || b in or false false end
+  "
+  printfn "logical_or2 abst: %A" logical_or2
+  printfn "logical_or2 eval: %A" (run logical_or2)
 
   0
