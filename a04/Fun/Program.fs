@@ -1,5 +1,7 @@
 module Program
 open ParseAndRun
+open Absyn
+open Fun
 
 [<EntryPoint>]
 let main argv =
@@ -14,11 +16,20 @@ let main argv =
   printfn "sum abst: %A" abst_sum
   printfn "sum eval: %A" (run abst_sum)
 
-  let abst_3pow8 = fromString "let f x = if x = 1 then x else 3 * f (x-1) in f 9 end"
-  printfn "sum abst: %A" abst_3pow8
-  printfn "sum eval: %A" (run abst_3pow8)
+  let abst_3pow8 = fromString "let f x = if x = 0 then 1 else 3 * f (x-1) in f 8 end"
+  printfn "3pow8 abst: %A" abst_3pow8
+  printfn "3pow8 eval: %A" (run abst_3pow8)
+
+  let abst_pows = fromString "let g y = if y = 0 then 1 else 3 * g (y-1) in let f x = if x = 0 then 1 else g x + f (x-1) in f 11 end end"
+  printfn "pows abst: %A" abst_pows
+  printfn "pows eval: %A" (run abst_pows)
+
+  let abst_pows2 = fromString "let f x = let aux y = if y = 0 then 1 else x * aux (y-1) in aux 8 end in let g z = if z = 0 then 0 else (f z) + g (z-1) in g 10 end end"
+  printfn "pows2 abst: %A" abst_pows2
+  printfn "pows2 eval: %A" (run abst_pows2)
 
   (* Exercise 4.3 *)
-  
+  let multi_arg = Letfun("f", ["x"; "y"], Prim("+", Var "x", Var "y"), Call(Var "f", [CstI 10; CstI 1]))
+  printfn "multi_arg abst: %A" (eval multi_arg [])
 
   0
