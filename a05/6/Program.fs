@@ -1,11 +1,12 @@
 module Program
 
+open Absyn
 open ParseAndRunHigher
 open HigherFun
 
 (* Exercise 6.1 *)
 
-let str1 = @"
+let consyn1 = @"
 let add x =
   let f y =
     x + y
@@ -13,7 +14,7 @@ let add x =
 in add 2 5 end
 "
 
-let str2 = @"
+let consyn2 = @"
 let add x =
   let f y =
     x + y in
@@ -26,7 +27,7 @@ end
 end
 "
 
-let str3 = @"
+let consyn3 = @"
 let add x =
   let f y =
     x + y in
@@ -38,7 +39,7 @@ addtwo 5
 end end end
 "
 
-let str4 = @"
+let consyn4 = @"
 let add x =
   let f y =
     x + y in
@@ -46,26 +47,28 @@ let add x =
 add 2 end
 "
 
-let example1 = run (fromString str1)
-let example2 = run (fromString str2)
-let example3 = run (fromString str3)
-let example4 = run (fromString str4)
-
 (* Exercise 6.2 *)
+let consyn2_1 = "fun x -> 2*x"
+let consyn2_2 = "let y = 22 in fun z -> z+y end"
 
-let str2_1 = "fun x -> 2*x"
-let str2_2 = "let y = 22 in fun z -> z+y end"
+(* Exercise 6.3 *)
+let consyn3_1 = @"
+let add x = fun y -> x+y
+in add 2 5 end
+"
 
-let example2_1 = fromString str2_1
-let example2_2 = fromString str2_2
+let consyn3_2 = @"
+let add = fun x -> fun y -> x+y
+in add 2 5 end
+"
 
 [<EntryPoint>]
 let main argv =
   (* Exercise 6.1 *)
-  printfn "eval 1: %A" example1
-  printfn "eval 2: %A" example2
-  printfn "eval 3: %A" example3
-  printfn "eval 4: %A" example4
+  printfn "eval 1: %A" (run (fromString consyn1))
+  printfn "eval 2: %A" (run (fromString consyn2))
+  printfn "eval 3: %A" (run (fromString consyn3))
+  printfn "eval 4: %A" (run (fromString consyn4))
 
   (*
     In example 3,
@@ -75,7 +78,15 @@ let main argv =
   *)
 
   (* Exercise 6.2 *)
-  // printf "absyn 2_1: %A" example2_1
-  // printf "absyn 2_2: %A" example2_2
+  printfn "absyn 2_1: %A"      (fromString consyn2_1)
+  printfn "eval 2_1: %A"  (run (fromString consyn2_1))
+  printfn "absyn 2_2: %A"      (fromString consyn2_2)
+  printfn "eval 2_2: %A"  (run (fromString consyn2_2))
+
+  (* Exercise 6.3 *)
+  printfn "absyn 3_1: %A"      (fromString consyn3_1)
+  printfn "eval 3_1: %A"  (run (fromString consyn3_1))
+  printfn "absyn 3_2: %A"      (fromString consyn3_2)
+  printfn "eval 3_2: %A"  (run (fromString consyn3_2))
 
   0

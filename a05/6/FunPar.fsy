@@ -14,7 +14,8 @@
 %token ELSE END FALSE IF IN LET NOT THEN TRUE
 %token PLUS MINUS TIMES DIV MOD
 %token EQ NE GT LT GE LE
-%token LPAR RPAR 
+%token LPAR RPAR
+%token FUN RARR
 %token EOF
 
 %left ELSE              /* lowest precedence  */
@@ -57,6 +58,7 @@ AtExpr:
   | NAME                                { Var $1                 }
   | LET NAME EQ Expr IN Expr END        { Let($2, $4, $6)        }
   | LET NAME NAME EQ Expr IN Expr END   { Letfun($2, $3, $5, $7) }
+  | FUN NAME RARR Expr                  { Fun($2, $4)            }
   | LPAR Expr RPAR                      { $2                     }
 ;
 
