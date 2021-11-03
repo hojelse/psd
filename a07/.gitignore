@@ -1,0 +1,6 @@
+bin
+obj
+CLex.fs
+CPar.fs
+CPar.fsi
+*.class
