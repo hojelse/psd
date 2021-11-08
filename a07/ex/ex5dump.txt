@@ -1,0 +1,55 @@
+#0  24      LDARGS
+#1  19 1 5  CALL 1 #5
+#4  25      STOP
+#5  15 1    INCSP 1
+#7  13      GETBP
+#8  0 1     CSTI 1
+#10 1       ADD
+#11 13      GETBP
+#12 0 0     CSTI 0
+#14 1       ADD
+#15 11      LDI
+#16 12      STI
+#17 15 -1   INCSP -1
+#19 15 1    INCSP 1
+#21 13      GETBP
+#22 0 0     CSTI 0
+#24 1       ADD
+#25 11      LDI
+#26 13      GETBP
+#27 0 2     CSTI 2
+#29 1       ADD
+#30 19 2 57 CALL 2 #57
+#33 15 -1   INCSP -1
+#35 13      GETBP
+#36 0 2     CSTI 2
+#38 1       ADD
+#39 11      LDI
+#40 22      PRINTI
+#41 15 -1   INCSP -1
+#43 15 -1   INCSP -1
+#45 13      GETBP
+#46 0 1     CSTI 1
+#48 1       ADD
+#49 11      LDI
+#50 22      PRINTI
+#51 15 -1   INCSP -1
+#53 15 -1   INCSP -1
+#55 21 0    RET 0
+#57 13      GETBP
+#58 0 1     CSTI 1
+#60 1       ADD
+#61 11      LDI
+#62 13      GETBP
+#63 0 0     CSTI 0
+#65 1       ADD
+#66 11      LDI
+#67 13      GETBP
+#68 0 0     CSTI 0
+#70 1       ADD
+#71 11      LDI
+#72 3       MUL
+#73 12      STI
+#74 15 -1   INCSP -1
+#76 15 0    INCSP 0
+#78 21 1    RET 1 

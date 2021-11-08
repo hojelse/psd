@@ -242,6 +242,8 @@ and bStmtordec stmtOrDec varEnv : bstmtordec * varEnv =
 
 and cExpr (e : expr) (varEnv : varEnv) (funEnv : funEnv) (C : instr list) : instr list =
     match e with
+    | PreInc acc     -> cAccess acc varEnv funEnv (DUP :: LDI :: CSTI 1 :: ADD :: STI :: C)
+    | PreDec acc     -> cAccess acc varEnv funEnv (DUP :: LDI :: CSTI 1 :: SUB :: STI :: C)
     | Access acc     -> cAccess acc varEnv funEnv (LDI :: C)
     | Assign(acc, e) -> cAccess acc varEnv funEnv (cExpr e varEnv funEnv (STI :: C))
     | CstI i         -> addCST i C

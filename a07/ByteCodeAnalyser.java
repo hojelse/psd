@@ -1,8 +1,11 @@
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Scanner;
 import java.util.Set;
+
+import javax.management.RuntimeErrorException;
 
 /**
  * ByteCodeAnalyser
@@ -25,65 +28,25 @@ public class ByteCodeAnalyser {
             Scanner s = new Scanner(file);
             var bytes = s.nextLine().split(" ");
 
-            Set<Integer> labels = new HashSet<>();
+            ArrayList<String> lines = new ArrayList<>();
 
-            for(int i = 0; i < bytes.length; i++) {
-                System.out.print("#"+i+" ");
-                int inst = Integer.parseInt(bytes[i]);
-                switch(inst) {
-                    case 0:
-                        System.out.println("CSTI " + bytes[++i] ); break;
-                    case 1:
-                        System.out.println("ADD"); break;
-                    case 2: 
-                        System.out.println("SUB"); break;
-                    case 3:
-                        System.out.println("MUL"); break;
-                    case 4:
-                        System.out.println("DIV"); break;
-                    case 5:
-                        System.out.println("MOD"); break;
-                    case 6:
-                        System.out.println("EQ"); break;
-                    case 7:
-                        System.out.println("LT"); break;
-                    case 8:
-                        System.out.println("NOT"); break;
-                    case 9:
-                        System.out.println("DUP"); break;
-                    case 10:
-                        System.out.println("SWAP"); break;
-                    case 11:
-                        System.out.println("LDI"); break;
-                    case 12:
-                        System.out.println("STI"); break;
-                    case 13:
-                        System.out.println("GETBP"); break;
-                    case 14:
-                        System.out.println("GETSP"); break;
-                    case 15:
-                        System.out.println("INCSP " + bytes[++i]); break;
-                    case 16:
-                        System.out.println("GOTO #" + bytes[++i]); labels.add(Integer.parseInt(bytes[i])); break;
-                    case 17:
-                        System.out.println("IFZERO #" + bytes[++i]); labels.add(Integer.parseInt(bytes[i])); break;
-                    case 18:
-                        System.out.println("IFNZRO #" + bytes[++i]); labels.add(Integer.parseInt(bytes[i])); break;
-                    case 19:
-                        System.out.println("CALL " + bytes[++i] + " #" + bytes[++i]); labels.add(Integer.parseInt(bytes[i])); break;
-                    case 20:
-                        System.out.println("TCALL " + bytes[++i] + " " + bytes[++i] + " #" + bytes[++i]); labels.add(Integer.parseInt(bytes[i])); break;
-                    case 21:
-                        System.out.println("RET " + bytes[++i]); break;
-                    case 22:
-                        System.out.println("PRINTI"); break;
-                    case 23:
-                        System.out.println("PRINTC"); break;
-                    case 24:
-                        System.out.println("LDARGS"); break;
-                    case 25:
-                        System.out.println("STOP"); break;
+            int i = 0;
+            while(i < bytes.length) {
+                String lineNumber = "#"+i;
+
+                String instructionString = "";
+                String[] nextTokens = getNextTokens(bytes, i);
+                for (String token : nextTokens)
+                    instructionString += token + " ";
+
+                String nextBytes = "";
+                for (int j = 0; j < nextTokens.length; j++) {
+                    nextBytes += bytes[i+j] + " ";
                 }
+
+                System.out.println(lineNumber + "\t" + nextBytes + "\t\t" + instructionString);
+
+                i += nextTokens.length;
             }
             
             s.close();
@@ -91,5 +54,75 @@ public class ByteCodeAnalyser {
         catch (FileNotFoundException fnfe) {
             System.err.println("No such file: " + args[0]);
         }
+    }
+
+    public static String[] getNextTokens(String[] bytes, int i) {
+        int instruction = Integer.parseInt(bytes[i]);
+
+        switch(instruction) {
+            case CSTI:
+                return new String[] { "CSTI", bytes[i+1] };
+            case ADD:
+                return new String[] { "ADD" };
+            case SUB: 
+                return new String[] { "SUB" };
+            case MUL:
+                return new String[] { "MUL" };
+            case DIV:
+                return new String[] { "DIV" };
+            case MOD:
+                return new String[] { "MOD" };
+            case EQ:
+                return new String[] { "EQ" };
+            case LT:
+                return new String[] { "LT" };
+            case NOT:
+                return new String[] { "NOT" };
+            case DUP:
+                return new String[] { "DUP" };
+            case SWAP:
+                return new String[] { "SWAP" };
+            case LDI:
+                return new String[] { "LDI" };
+            case STI:
+                return new String[] { "STI" };
+            case GETBP:
+                return new String[] { "GETBP" };
+            case GETSP:
+                return new String[] { "GETSP" };
+            case INCSP:
+                return new String[] { "INCSP", bytes[i+1] };
+            case GOTO:
+                return new String[] { "GOTO", "#"+bytes[i+1] };
+            case IFZERO:
+                return new String[] { "IFZERO", "#"+bytes[i+1] };
+            case IFNZRO:
+                return new String[] { "IFNZRO", "#"+bytes[i+1] };
+            case CALL:
+                return new String[] { "CALL", bytes[i+1], "#"+bytes[i+2] };
+            case TCALL:
+                return new String[] { "TCALL", bytes[i+1], bytes[i+2], "#"+bytes[i+3] };
+            case RET:
+                return new String[] { "RET", bytes[i+1] };
+            case PRINTI:
+                return new String[] { "PRINTI" };
+            case PRINTC:
+                return new String[] { "PRINTC" };
+            case LDARGS:
+                return new String[] { "LDARGS" };
+            case STOP:
+                return new String[] { "STOP" };
+            default:
+                throw new RuntimeException("Unknown instruction: " +  instruction);
+        }
+    }
+
+    public static String getBytes(String[] bytes, int i, int count) {
+        String str = "";
+        for (int j = 0; j < count; j++) {
+            str += bytes[j] + " ";
+        }
+
+        return str += "\t\t";
     }
 }

@@ -1,0 +1,59 @@
+  LDARGS
+  CALL (1, "L1")
+  STOP
+
+Label "L1"
+  INCSP 1
+  GETBP
+  CSTI 1
+  ADD
+  GETBP
+  CSTI 0
+  ADD
+  LDI
+  STI
+  INCSP -1
+  INCSP 1
+  GETBP
+  CSTI 0
+  ADD
+  LDI
+  GETBP
+  CSTI 2
+  ADD
+  CALL (2, "L2")
+  INCSP -1
+  GETBP
+  CSTI 2
+  ADD
+  LDI
+  PRINTI
+  INCSP -1
+  INCSP -1
+  GETBP
+  CSTI 1
+  ADD
+  LDI
+  PRINTI
+  INCSP -1
+  INCSP -1
+  RET 0
+
+Label "L2"
+  GETBP
+  CSTI 1
+  ADD
+  LDI
+  GETBP
+  CSTI 0
+  ADD
+  LDI
+  GETBP
+  CSTI 0
+  ADD
+  LDI
+  MUL
+  STI
+  INCSP -1
+  INCSP 0
+  RET 1

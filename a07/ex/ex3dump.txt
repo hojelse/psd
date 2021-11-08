@@ -1,0 +1,47 @@
+#0   24     LDARGS
+#1   19 1 5 CALL 1 "L1"
+#4   25     STOP
+
+Label "L1"
+#5   15 1   INCSP 1
+#7   13     GETBP
+#8   0 1    CSTI 1
+#10  1      ADD
+#11  0 0    CSTI 0
+#13  12     STI
+#14  15 -1  INCSP -1
+#16  16 43  GOTO "L3"
+
+Label "L2"
+#18  13     GETBP
+#19  0 1    CSTI 1
+#21  1      ADD
+#22  11     LDI
+#23  22     PRINTI
+#24  15 -1  INCSP -1
+#26  13     GETBP
+#27  0 1    CSTI 1
+#29  1      ADD
+#30  13     GETBP
+#31  0 1    CSTI 1
+#33  1      ADD
+#34  11     LDI
+#35  0 1    CSTI 1
+#37  1      ADD
+#38  12     STI
+#39  15 -1  INCSP -1
+#41  15 0   INCSP 0
+
+Label "L3"
+#43  13     GETBP
+#44  0 1    CSTI 1
+#46  1      ADD
+#47  11     LDI
+#48  13     GETBP
+#49  0 0    CSTI 0
+#51  1      ADD
+#52  11     LDI
+#53  7      LT
+#54  18 18  IFNZRO "L2"
+#56  15 -1  INCSP -1
+#58  21 0   RET 0 
