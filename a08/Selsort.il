@@ -115,7 +115,7 @@
 	IL_000a:  ldc.i4.1              |
 	IL_000b:  add                   |
 	IL_000c:  stloc.2               + var2 = var0 + 1
-	IL_000d:  br IL_0023            + branch to 0023
+	IL_000d:  br IL_0023            + branch 23
 
 	IL_0012:  ldarg.0           27->|
 	IL_0013:  ldloc.2               |
